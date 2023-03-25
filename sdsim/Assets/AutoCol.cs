@@ -10,7 +10,6 @@ public class AutoCol : MonoBehaviour
     private int hitsCurrentLap;
 
     private float resetTime = 3;
-    
 
     void OnTriggerEnter(Collider other)
     {
@@ -45,7 +44,7 @@ public class AutoCol : MonoBehaviour
             if (resetTime <= 0)
             {
                 Debug.Log("Collision lasted 3 secs");
-                
+                FindObjectOfType<moveToFinish>().updatePos(1);
             }
         }
     }
