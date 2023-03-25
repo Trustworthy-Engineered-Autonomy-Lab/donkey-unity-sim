@@ -9,20 +9,47 @@ public class AutoCol : MonoBehaviour
     private int lapNum;
     private int hitsCurrentLap;
 
+    private float resetTime = 3;
+    
+
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag.Equals("Finish") == true)
         {
-            lapNum = lapNum + 1;
+            lapNum += 1;
             hitsCurrentLap = 0;
             Debug.Log("Lap: " + lapNum + " |Total hits: " + hits);
         }
         else
         {
-            hits = hits + 1;
+            hits += 1;
             hitsCurrentLap = hitsCurrentLap + 1;
             Debug.Log("Lap: " + lapNum + " |Hits this lap: " + hitsCurrentLap + " |Total hits: " + hits);
         }
         
     }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag.Equals("Finish") == false)
+        {
+            if (resetTime > 0)
+            {
+                resetTime -= Time.deltaTime;
+                if (resetTime % 1 == 0)
+                {
+                    Debug.Log("Collision time: " + resetTime);
+                }
+            }
+
+            if (resetTime <= 0)
+            {
+                Debug.Log("Collision lasted 3 secs");
+                
+            }
+        }
+    }
+
+        
+    
 }
