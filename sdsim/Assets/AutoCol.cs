@@ -35,20 +35,20 @@ public class AutoCol : MonoBehaviour
             if (resetTime > 0)
             {
                 resetTime -= Time.deltaTime;
-                if (resetTime % 1 == 0)
-                {
-                    Debug.Log("Collision time: " + resetTime);
-                }
+               
             }
 
             if (resetTime <= 0)
             {
                 Debug.Log("Collision lasted 3 secs");
                 FindObjectOfType<moveToFinish>().updatePos(1);
+                resetTime = 3;
             }
         }
     }
 
-        
-    
+    void OnTriggerLeave(Collider other)
+    {
+        resetTime = 3;
+    }
 }
