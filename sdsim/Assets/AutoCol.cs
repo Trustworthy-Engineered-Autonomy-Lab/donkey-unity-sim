@@ -8,6 +8,7 @@ public class AutoCol : MonoBehaviour
     private int hits;
     private int lapNum;
     private int hitsCurrentLap;
+    private int resetCount;
 
     private float resetTime = 3;
 
@@ -23,7 +24,7 @@ public class AutoCol : MonoBehaviour
         {
             hits += 1;
             hitsCurrentLap = hitsCurrentLap + 1;
-            Debug.Log("Lap: " + lapNum + " |Hits this lap: " + hitsCurrentLap + " |Total hits: " + hits);
+            Debug.Log("Lap: " + lapNum + " |Hits this lap: " + hitsCurrentLap + " |Majors: " + resetCount + " |Minors: " + (hits-resetCount));
         }
         
     }
@@ -43,6 +44,7 @@ public class AutoCol : MonoBehaviour
                 Debug.Log("Collision lasted 3 secs");
                 FindObjectOfType<moveToFinish>().updatePos(1);
                 resetTime = 3;
+                resetCount += 1;
             }
         }
     }
