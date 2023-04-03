@@ -18,7 +18,7 @@ public class AutoCol : MonoBehaviour
         {
             lapNum += 1;
             hitsCurrentLap = 0;
-            Debug.Log("Lap: " + lapNum + " |Total hits: " + hits);
+            Debug.Log("Lap: " + lapNum + " |Majors: " + resetCount + " |Minors: " + (hits - resetCount));
         }
         else
         {
@@ -39,7 +39,7 @@ public class AutoCol : MonoBehaviour
                
             }
 
-            if (resetTime <= 0)
+            else
             {
                 Debug.Log("Collision lasted 3 secs");
                 FindObjectOfType<moveToFinish>().updatePos(1);
