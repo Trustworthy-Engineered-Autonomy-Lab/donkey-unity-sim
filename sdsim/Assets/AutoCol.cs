@@ -12,10 +12,14 @@ public class AutoCol : MonoBehaviour
     private float timeThisLap;
     private float lapStartTime;
 
+    private Vector3 lastPos;
+    private Vector3 currentPos;
+
     private float resetTime = 3;
 
     void OnTriggerEnter(Collider other)
-    {
+    {   
+        currentPos = gameObject.transform.position;
         if(other.gameObject.tag.Equals("Finish") == true)
         {
             lapNum += 1;
@@ -34,8 +38,9 @@ public class AutoCol : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals("Finish") == false)
+        if (other.gameObject.tag.Equals("Finish") == false && gameObject.transform.position.magnitude - currentPos.magnitude < 0.001 && gameObject.transform.position.magnitude - currentPos.magnitude > -0.001)
         {
+            
             if (resetTime > 0)
             {
                 resetTime -= Time.deltaTime;
