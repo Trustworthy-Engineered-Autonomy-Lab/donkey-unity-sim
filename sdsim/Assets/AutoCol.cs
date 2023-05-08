@@ -38,10 +38,9 @@ public class AutoCol : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag.Equals("Finish") == false && (gameObject.transform.position.magnitude - currentPos.magnitude < 0.001) && (gameObject.transform.position.magnitude - currentPos.magnitude > -0.001))
+        if (other.gameObject.tag.Equals("Finish") == false)
         {
-            Debug.Log("Stationary Collision "+ resetTime);
-            
+ 
             if (resetTime > 0)
             {
                 resetTime -= Time.deltaTime;
@@ -63,32 +62,6 @@ public class AutoCol : MonoBehaviour
     void OnTriggerLeave(Collider other)
     {
         resetTime = 3;
-    }
-
-    void notMoving()
-    {
-        if (gameObject.transform.position.magnitude - currentPos.magnitude < 0.001)
-        {
-            Debug.Log("Not moving");
-
-            Debug.Log(resetTime);
-
-            if (resetTime > 0)
-            {
-                resetTime -= Time.deltaTime;
-
-            }
-
-            else
-            {
-
-                timeThisLap = Time.time - lapStartTime - 3;
-                Debug.Log("Reset. Lap Lasted: " + timeThisLap);
-                FindObjectOfType<moveToFinish>().updatePos(1);
-                resetTime = 3;
-                resetCount += 1;
-            }
-        }
     }
     
 }
