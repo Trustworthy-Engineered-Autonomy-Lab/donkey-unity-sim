@@ -32,8 +32,8 @@ namespace PathCreation.Examples
 
                 dist = Vector3.Distance(closestPointXZ, carPosXZ);
 
-                
-                
+                //try using the getdirection method from vertex path to compare car direction to path direction
+
             }
         }
 
