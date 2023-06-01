@@ -15,11 +15,7 @@ namespace PathCreation.Examples
         // Start is called before the first frame update
         void Start()
         {
-            if (pathCreator != null)
-            {
-                // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
-                pathCreator.pathUpdated += OnPathChanged;
-            }
+            
         }
 
         // Update is called once per frame
@@ -36,14 +32,11 @@ namespace PathCreation.Examples
 
                 dist = Vector3.Distance(closestPointXZ, carPosXZ);
 
-                //dist = Vector3.Distance(transform.position, closestPoint);
-                Debug.DrawLine(carPosXZ, closestPointXZ, Color.red);
+                
+                
             }
         }
 
-        void OnPathChanged()
-        {
-            distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
-        }
+        
     }
 }
