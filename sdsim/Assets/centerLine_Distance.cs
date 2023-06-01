@@ -10,6 +10,7 @@ namespace PathCreation.Examples
         public PathCreator pathCreator;
         public float dist = 0;
         float distanceTravelled;
+        
 
         // Start is called before the first frame update
         void Start()
@@ -28,8 +29,15 @@ namespace PathCreation.Examples
             {
 
                 Vector3 closestPoint = pathCreator.path.GetClosestPointOnPath(transform.position);
-                dist = Vector3.Distance(transform.position, closestPoint);
-                Debug.DrawLine(transform.position, closestPoint, Color.red);
+
+                Vector3 closestPointXZ = new Vector3(closestPoint.x, 0.1f, closestPoint.z);
+
+                Vector3 carPosXZ = new Vector3(transform.position.x, 0.1f, transform.position.z);
+
+                dist = Vector3.Distance(closestPointXZ, carPosXZ);
+
+                //dist = Vector3.Distance(transform.position, closestPoint);
+                Debug.DrawLine(carPosXZ, closestPointXZ, Color.red);
             }
         }
 
