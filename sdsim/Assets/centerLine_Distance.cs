@@ -32,11 +32,21 @@ namespace PathCreation.Examples
 
                 dist = Vector3.Distance(closestPointXZ, carPosXZ);
 
-                //try using the getdirection method from vertex path to compare car direction to path direction
+                Vector3 trackVec = pathCreator.path.GetNormal(pathCreator.path.GetClosestTimeOnPath(closestPoint));
+                    
+                Vector3 carVec = transform.GetComponent<Rigidbody>().velocity;
 
+                float cAngle = Vector3.Angle(trackVec, carVec) - 90f;
+
+                if(carVec.magnitude < 0.5)
+                {
+                    Debug.Log("Angle: NaN");
+                }
+                else
+                {
+                    Debug.Log(cAngle);
+                }
             }
         }
-
-        
     }
 }
