@@ -11,6 +11,7 @@ public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 	float throttle = 0.0f;
 	float footBrake = 0.0f;
 	float handBrake = 0.0f;
+	float trackAngle = 0.0f;
 	Vector3 vel = Vector3.zero;
 	Vector3 accel = Vector3.zero;
 	Quaternion rotation = Quaternion.identity;
@@ -47,10 +48,11 @@ public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 
 	public float GetHandBrake() { return handBrake; }
 
-
 	//query state.
 	public Transform GetTransform() { return this.transform; }
 
+    public float GetTrackAngle() { return trackAngle; }
+    
 	public Vector3 GetVelocity()
 	{
 		return rb.velocity;

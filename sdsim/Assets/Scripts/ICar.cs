@@ -30,9 +30,10 @@ public interface ICar
 
 	float GetHandBrake();
 
+    //query state.
+    float GetTrackAngle();
 
-	//query state.
-	Transform GetTransform();
+    Transform GetTransform();
 
 	Vector3 GetVelocity();
 

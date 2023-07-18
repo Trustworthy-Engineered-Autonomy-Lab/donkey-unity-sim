@@ -10,7 +10,7 @@ namespace PathCreation.Examples
         public PathCreator pathCreator;
         public float dist = 0;
         float distanceTravelled;
-        
+        public float cAngle;
 
         // Start is called before the first frame update
         void Start()
@@ -36,42 +36,14 @@ namespace PathCreation.Examples
                     
                 Vector3 carVec = transform.GetComponent<Rigidbody>().velocity;
 
-                float cAngle = Vector3.Angle(trackVec, carVec) - 90f;
-
                 if(carVec.magnitude < 0.5)
                 {
-                    Debug.Log("Angle: NaN");
+                    this.cAngle = 0;
                 }
                 else
                 {
-                    Debug.Log(cAngle);
+                    this.cAngle = Vector3.Angle(trackVec, carVec) - 90f;
                 }
-            }
-        }
-
-        public float getCarAngle()
-        {
-            Vector3 closestPoint = pathCreator.path.GetClosestPointOnPath(transform.position);
-
-            Vector3 closestPointXZ = new Vector3(closestPoint.x, 0.1f, closestPoint.z);
-
-            Vector3 carPosXZ = new Vector3(transform.position.x, 0.1f, transform.position.z);
-
-            dist = Vector3.Distance(closestPointXZ, carPosXZ);
-
-            Vector3 trackVec = pathCreator.path.GetNormal(pathCreator.path.GetClosestTimeOnPath(closestPoint));
-
-            Vector3 carVec = transform.GetComponent<Rigidbody>().velocity;
-
-            float cAngle = Vector3.Angle(trackVec, carVec) - 90f;
-
-            if (carVec.magnitude < 0.5)
-            {
-                return (0);
-            }
-            else
-            {
-                return (cAngle);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using PathCreation.Examples;
 
 public class Car : MonoBehaviour, ICar{
 
@@ -28,6 +28,7 @@ public class Car : MonoBehaviour, ICar{
 	private Quaternion rotation = Quaternion.identity;
 	private Vector3 gyro = Vector3.zero;
 
+	public centerLine_Distance centerLine_Distance;
 	public Rigidbody rb;
 
 	//for logging
@@ -43,18 +44,30 @@ public class Car : MonoBehaviour, ICar{
 	//name of the last object we hit.
 	public string last_collision = "none";
 
+	public float trackAngle = 0f;
 
+	 
 	// Use this for initialization
 	void Awake () 
 	{
 		rb = GetComponent<Rigidbody>();
-
+		 
 		if(rb && centrOfMass)
 		{
 			rb.centerOfMass = centrOfMass.localPosition;
 		}
 
-		requestTorque = 0f;
+        // Initialize the centerLine_Distance variable
+        centerLine_Distance = GetComponent<centerLine_Distance>();
+
+        // Check if the object is null
+        if (centerLine_Distance == null)
+        {
+            // Create a new object
+            centerLine_Distance = new centerLine_Distance();
+        }
+
+        requestTorque = 0f;
 		requestSteering = 0f;
 
 		SavePosRot();
@@ -131,6 +144,11 @@ public class Car : MonoBehaviour, ICar{
 	public float GetSteering()
 	{
 		return requestSteering;
+	}
+
+	public float GetTrackAngle()
+	{
+		return trackAngle;
 	}
 
 	public float GetThrottle()
@@ -212,7 +230,8 @@ public class Car : MonoBehaviour, ICar{
 		acceleration = (velocity - prevVel)/Time.deltaTime;
 		gyro = rb.angularVelocity;
 		rotation = rb.rotation;
-
+		trackAngle = centerLine_Distance.cAngle;     //This line works and gets the correct value
+		
 		// use the torque curve
 		float throttle = torqueCurve.Evaluate(velocity.magnitude / maxSpeed) * requestTorque * maxTorque;
 		float steerAngle = requestSteering;
