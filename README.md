@@ -41,7 +41,9 @@ And then you can install the dependancies. This installs a specific version of k
 pip install -r requirements.txt
 ```
 
-This will install [Donkey Gym](https://github.com/tawnkramer/donkey_gym) and [Donkey Car](https://github.com/tawnkramer/donkey) packages from source.
+This will install [Donkey Gym](https://github.com/tawnkramer/donkey_gym) package from source.
+
+Requirement.txt doesn't have [Donkey Car](https://github.com/autorope/donkeycar) so install Donkey car to the virtual environment
 
 Note: Tensorflow >= 1.10.1 is required
 
@@ -54,6 +56,21 @@ Or without a supported gpu
 ```bash
 pip install tensorflow
 ```
+## Run the environment
+
+1) Open the installed UnityHub
+2) Add Project (open sdsim folder from this repo) to UnityHub
+3) Create an executable file for this using UnityHub
+4) Download/ Clone the controller/donkeycar from gitlink provided by the professor
+5) Change the path of DONKEY_SIM_PATH variable in config.py file of the controller/donkeycar
+6) Move the controller/donkeycar to src/gym-donkeycar
+7) To run the environment (Activate the Virtual Environment First)
+
+```bash
+cd src/gym-donkeycar
+python manage.py drive
+```
+
 
 
 ## Demo
