@@ -61,7 +61,7 @@ pip install tensorflow
 1) Open the installed UnityHub
 2) Add Project (open sdsim folder from this repo) to UnityHub
 3) Create an executable file for this using UnityHub
-4) Download/ Clone the controller/donkeycar from gitlink provided by the professor
+4) Download/ Clone the controller/donkeycar from gitlink provided by the professor [GitLink](https://github.com/Trustworthy-Engineered-Autonomy-Lab/donkey-sim-control)
 5) Change the path of DONKEY_SIM_PATH variable in config.py file of the controller/donkeycar
 6) Move the controller/donkeycar to src/gym-donkeycar
 7) To run the environment (Activate the Virtual Environment First)
