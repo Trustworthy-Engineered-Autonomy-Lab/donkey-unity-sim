@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class GlobalStateEditor : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class GlobalStateEditor : MonoBehaviour
     {
         get { return GlobalState.maxSplitScreen; }
         set { GlobalState.maxSplitScreen = value; }
+    }
+    public float lightIntensity
+    {
+        get { return GlobalState.lightIntensity; }
+        set { GlobalState.lightIntensity = value; }
     }
     public bool generateTrees
     {
@@ -200,6 +206,14 @@ public class GlobalStateEditor : MonoBehaviour
             maxSplitScreen = tmp_maxsp;
         YOffset += Ysteps;
 
+        GUI.Label(new Rect(0, YOffset, LabelXOffset, 20), "Light Intensity");
+        string lightIntensityString = GUI.TextField(new Rect(LabelXOffset, YOffset, width-LabelXOffset, 20), lightIntensity.ToString());
+        float tmp_lightIntensity = lightIntensity;
+        float.TryParse(lightIntensityString, out tmp_lightIntensity);
+        if (tmp_lightIntensity != lightIntensity)
+            lightIntensity = tmp_lightIntensity;
+        YOffset += Ysteps;
+
         extendedTelemetry = GUI.Toggle(new Rect(0, YOffset, width, 20), extendedTelemetry, "extendedTelemetry");
         YOffset += Ysteps;
         generateTrees = GUI.Toggle(new Rect(0, YOffset, width, 20), generateTrees, "generateTrees");
@@ -303,6 +317,7 @@ public class GlobalStateEditor : MonoBehaviour
         PlayerPrefs.SetFloat("timeScale", timeScale);
         PlayerPrefs.SetFloat("timeOut", timeOut);
         PlayerPrefs.SetInt("maxSplitScreen", maxSplitScreen);
+        PlayerPrefs.SetFloat("lightIntensity", lightIntensity);
         PlayerPrefs.SetInt("generateTrees", generateTrees ? 1 : 0);
         PlayerPrefs.SetInt("extendedTelemetry", extendedTelemetry ? 1 : 0);
         PlayerPrefs.SetInt("generateRandomCones", generateRandomCones ? 1 : 0);
@@ -329,6 +344,7 @@ public class GlobalStateEditor : MonoBehaviour
         timeScale = PlayerPrefs.GetFloat("timeScale", timeScale);
         timeOut = PlayerPrefs.GetFloat("timeOut", timeOut);
         maxSplitScreen = PlayerPrefs.GetInt("maxSplitScreen", maxSplitScreen);
+        lightIntensity = PlayerPrefs.GetFloat("lightIntensity", lightIntensity);
         generateTrees = PlayerPrefs.GetInt("generateTrees", generateTrees ? 1 : 0) == 1 ? true : false;
         extendedTelemetry = PlayerPrefs.GetInt("extendedTelemetry", extendedTelemetry ? 1 : 0) == 1 ? true : false;
         generateRandomCones = PlayerPrefs.GetInt("generateRandomCones", generateRandomCones ? 1 : 0) == 1 ? true : false;
