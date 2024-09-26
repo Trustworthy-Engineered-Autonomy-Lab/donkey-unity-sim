@@ -14,6 +14,9 @@ Then validate the steering control by sending images to your neural network and 
 
 ## Some videos to help you get started
 
+### Setting up environment
+[![IMAGE ALT TEXT](https://img.youtube.com/vi/wqQMmHVT8qw/0.jpg)](https://www.youtube.com/watch?v=wqQMmHVT8qw "Getting Started with Donkey Sim.")
+
 ### Training your first network
 [![IMAGE ALT TEXT](https://img.youtube.com/vi/oe7fYuYw8GY/0.jpg)](https://www.youtube.com/watch?v=oe7fYuYw8GY "Getting Started w sdsandbox")
 
@@ -153,5 +156,3 @@ python predict_client.py --model=../outputs/mymodel.h5
 
 
 **Note: pygame only needed if using mon_and_predict_server.py which gives a live camera feed during inferencing.
-
-
