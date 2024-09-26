@@ -83,6 +83,7 @@ namespace tk
             client.dispatchInMainThread = false; //too slow to wait.
             client.dispatcher.Register("get_protocol_version", new tk.Delegates.OnMsgRecv(OnProtocolVersion));
             client.dispatcher.Register("control", new tk.Delegates.OnMsgRecv(OnControlsRecv));
+            client.dispatcher.Register("pause", new tk.Delegates.OnMsgRecv(OnPauseRecv)); // to pause the screen 
             client.dispatcher.Register("exit_scene", new tk.Delegates.OnMsgRecv(OnExitSceneRecv));
             client.dispatcher.Register("reset_car", new tk.Delegates.OnMsgRecv(OnResetCarRecv));
             client.dispatcher.Register("step_mode", new tk.Delegates.OnMsgRecv(OnStepModeRecv));
@@ -251,6 +252,38 @@ namespace tk
                 car.RequestSteering(ai_steering);
                 car.RequestThrottle(ai_throttle);
                 car.RequestFootBrake(ai_brake);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }
+        }
+
+        // NEW API To Pause the Screen
+        void OnPauseRecv(JSONObject json)
+        {
+            try
+            {
+                Debug.Log(json["is_pause"]);
+                bool isPause = json["is_pause"].b;
+                Debug.Log(isPause);
+                if (isPause)
+                {
+                    Debug.Log("Unfreezing game");
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                        Time.timeScale = 1f; // Unfreeze the game
+                    });
+                }
+                else
+                {
+                    Debug.Log("Freezing game");
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                        Time.timeScale = 0f; // Freeze the game
+                    });
+                }
+
+                //isPause = Boolean.Parse(json["is_pause"].str, CultureInfo.InvariantCulture.NumberFormat);
+
             }
             catch (Exception e)
             {
