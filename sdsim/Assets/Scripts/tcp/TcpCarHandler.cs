@@ -192,6 +192,7 @@ namespace tk
             if (pm != null)
             {
                 float cte = 0.0f;
+                iActiveSpan = pm.carPath.GetClosestSpanIndex(tm.position);
                 pm.carPath.GetCrossTrackErr(tm.position, ref iActiveSpan, ref cte); // get distance to closest node
                 if (GlobalState.extendedTelemetry) { json.AddField("cte", cte); }
 
@@ -304,6 +305,8 @@ namespace tk
         void OnResetCarRecv(JSONObject json)
         {
             bResetCar = true;
+            // Debug.Log("Kshitij: Resetting");
+                    
         }
 
         void OnRegenRoad(JSONObject json)
@@ -583,7 +586,7 @@ namespace tk
                 if (bResetCar)
                 {
                     car.RestorePosRot();
-
+                    // Debug.Log("Kshitij: Resetting");
                     if (carObj != null)
                     {
                         //reset last controls
@@ -592,8 +595,10 @@ namespace tk
                         car.RequestFootBrake(10.0f);
 
                         // Reset closest point of car path
-                        if (pm)
-                            iActiveSpan = 0;
+                        // if (pm != null){
+                        // Debug.Log("Kshitij: Checking Path Manager");
+                        iActiveSpan = 0;
+                        // }
                     }
 
                     bResetCar = false;

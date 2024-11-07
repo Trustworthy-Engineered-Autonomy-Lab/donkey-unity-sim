@@ -43,16 +43,18 @@ public class AutoCol : MonoBehaviour
  
             if (resetTime > 0)
             {
-                resetTime -= Time.deltaTime;
-               
+                resetTime -= Time.deltaTime;  
             }
 
             else
             {
-                
                 timeThisLap = Time.time - lapStartTime - 3;
                 Debug.Log("Reset. Lap Lasted: " + timeThisLap);
+                // Debug.Log("Kshitij Position: " + gameObject.transform.position);
+                
                 FindObjectOfType<moveToFinish>().updatePos(1);
+                // Debug.Log("Kshitij Position: " + gameObject.transform.position);
+                
                 resetTime = 3;
                 resetCount += 1;
             }
