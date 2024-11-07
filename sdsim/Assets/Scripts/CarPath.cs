@@ -87,6 +87,7 @@ public class CarPath
 
     public bool GetCrossTrackErr(Vector3 pos, ref int iActiveSpan, ref float err, int lookAhead = 1)
     {
+        // iActiveSpan = GetClosestSpanIndex(carObj.transform.position);
         int nextIActiveSpan = (iActiveSpan + 1) % (nodes.Count);
         int aheadIActiveSpan = (iActiveSpan + lookAhead) % (nodes.Count);
 
@@ -123,7 +124,7 @@ public class CarPath
         {
             iActiveSpan = (iActiveSpan + 1) % (nodes.Count);
         }
-
+        // Debug.Log("Kshitij: " + iActiveSpan);
         // if (iActiveSpan - oldActiveSpan <= 0) { return true; } // we lapped
         return false; // we are on the same lap
     }
