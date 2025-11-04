@@ -1,3 +1,22 @@
+For new version unity:
+
+there will be such error:
+
+Assets\Scripts\GlobalStateEditor.cs(2,42):
+error CS0234: The type or namespace name 'Universal'
+does not exist in the namespace 'UnityEngine.Experimental.Rendering'
+
+
+need to replace UnityEngine.Experimental.Rendering.Universal with UnityEngine.Rendering.Universal
+
+
+using UnityEngine.Experimental.Rendering.Universal;
+
+->
+
+using UnityEngine.Rendering.Universal;
+
+
 # SdSandbox
 
 Self Driving Car Sandbox
