@@ -356,11 +356,25 @@ namespace tk
             string car_name = json.GetField("car_name").str;
             int font_size = 100;
 
+            // New functionality for random_start
+            if (json.HasField("random_start")){
+                GlobalState.randomStart = json.GetField("random_start").b;
+                Debug.Log($"config has random start: {GlobalState.randomStart}");
+            }
+
             if (json.GetField("font_size") != null)
                 font_size = int.Parse(json.GetField("font_size").str);
 
             if (carObj != null && car_name != "Racer Name")
                 UnityMainThreadDispatcher.Instance().Enqueue(SetCarConfig(body_style, body_r, body_g, body_b, car_name, font_size));
+            
+            if (GlobalState.randomStart && carSpawner != null){
+                // This implementation is for having just one car.
+                // TCP client doesn't connect before car is spawned so we must move the car.
+                UnityMainThreadDispatcher.Instance().Enqueue(carSpawner.MoveExistingCarsToRandom());
+                //FindObjectOfType<moveToFinish>().updatePos(1);
+
+            }
         }
 
         IEnumerator SetCarConfig(string body_style, int body_r, int body_g, int body_b, string car_name, int font_size)

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using tk;
@@ -351,9 +351,52 @@ public class CarSpawner : MonoBehaviour
         offset.z = -distCarRows * iRow;
         offset.x = -distCarCols * iCol;
 
+        // Ethan Krol debug tests
+        Debug.Log($"Spawn: {spawn}, {pos}, {rot}");
+        int idx = 0;
+        foreach (PathNode p in pathManager.carPath.centerNodes)
+        {
+            Debug.Log($"CenterNode[{idx}] pos={p.pos} rotEuler={p.rotation.eulerAngles} activity={p.activity}");
+            idx++;
+        }
+
         return (spawn.position + rot * offset, rot);
     }
 
+    // Ethan Krol: random start position function
+    public (Vector3, Quaternion) GetRandomCarStartPosRot()
+    {
+
+        // Debugging all output positions
+
+        Debug.Log("hi from getstartposrotrandom icar");
+        int idx = 0;
+
+        foreach (PathNode p in pathManager.carPath.centerNodes)
+        {
+            Debug.Log($"CenterNode[{idx}] pos={p.pos} rotEuler={p.rotation.eulerAngles} activity={p.activity}");
+            idx++;
+        }
+
+        int total = pathManager.carPath.centerNodes.Count;
+        int randIdx = UnityEngine.Random.Range(0,total - 1);
+        Vector3 randStartPos = pathManager.carPath.centerNodes[randIdx].pos;
+        randStartPos.y += 0.1f;
+        
+        Quaternion randStartRot = pathManager.carPath.centerNodes[randIdx].rotation;
+
+        // Right now, the car might clip into the center of the road unexpectedly. This seems to be because it does not start high enough.
+        // Each centerNode's middle coordinate is 0.1, so we could try hard setting it to about 0.3 for now.
+
+        /*while (IsOccupied(randStartPos))
+        {
+            
+        }*/
+
+        Debug.Log($"When random start pos is called, car has random start state {GlobalState.randomStart}");
+        return (randStartPos, randStartRot);
+
+    }
     public (Vector3, Quaternion) GetCarStartPosRot()
     {
 
@@ -370,9 +413,33 @@ public class CarSpawner : MonoBehaviour
             }
         }
 
+        // Ethan Krol debug tests
+        Debug.Log("hi from getstartposrot");
+        Debug.Log($"When non-random start pos is called, car has random start state {GlobalState.randomStart}");
+        
+        /*
+        foreach (PathNode p in pathManager.carPath.centerNodes)
+        {
+            Debug.Log($"CenterNode[{idx}] pos={p.pos} rotEuler={p.rotation.eulerAngles} activity={p.activity}");
+            idx++;
+        */
+
         return (startPos, startRot);
     }
 
+    public IEnumerator MoveExistingCarsToRandom(){
+        if(!GlobalState.randomStart) yield return null;
+
+        foreach (GameObject go in cars){
+            Vector3 pos;
+            Quaternion rot;
+            (pos, rot) = GetRandomCarStartPosRot();
+            go.transform.SetPositionAndRotation(pos, rot);
+            go.GetComponent<Car>().SavePosRot();
+        }
+        UpdateSplitScreenCams();
+        yield return null;
+    }
 
     public GameObject Spawn(tk.JsonTcpClient client, bool paceCar)
     {
@@ -393,8 +460,17 @@ public class CarSpawner : MonoBehaviour
         }
 
         cars.Add(go);
+        // Ethan Krol - add function for random start location
+        Debug.Log("Random start before = " + GlobalState.randomStart);
+        Vector3 startPos;
+        Quaternion startRot;
 
-        (Vector3 startPos, Quaternion startRot) = GetCarStartPosRot();
+        if (GlobalState.randomStart){
+            (startPos, startRot) = GetRandomCarStartPosRot();
+        }
+        else{
+            (startPos, startRot) = GetCarStartPosRot();
+        }
         go.transform.SetPositionAndRotation(startPos, startRot);
         go.GetComponent<Car>().SavePosRot();
         UpdateSplitScreenCams();
@@ -475,6 +551,7 @@ public class CarSpawner : MonoBehaviour
             Debug.LogError("failed to find Timer");
         }
 
+        Debug.Log("Random start after = " + GlobalState.randomStart);
         return go;
     }
 

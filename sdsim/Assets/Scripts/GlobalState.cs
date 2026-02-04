@@ -13,6 +13,7 @@ public static class GlobalState
     public static int maxSplitScreen = 4;
     public static bool bAutoHideSceneMenu = false;
     public static float lightIntensity = 1.5f;
+    public static bool randomStart = false;
 
     // should we create a car even though we don't have a network client?
     public static bool bCreateCarWithoutNetworkClient = false;

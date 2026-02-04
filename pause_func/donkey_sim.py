@@ -15,7 +15,7 @@ from typing import Any, Callable, Dict, List, Tuple, Union
 import numpy as np
 from PIL import Image
 
-from gym_donkeycar.core.fps import FPSTimer
+from src.gym_donkeycar.core.fps import FPSTimer
 from gym_donkeycar.core.message import IMesgHandler
 from gym_donkeycar.core.sim_client import SimClient
 
@@ -77,8 +77,9 @@ class DonkeyUnitySimContoller:
         body_rgb: Tuple[int, int, int],
         car_name: str,
         font_size: int,
+        random_start: bool
     ) -> None:
-        self.handler.send_car_config(body_style, body_rgb, car_name, font_size)
+        self.handler.send_car_config(body_style, body_rgb, car_name, font_size, random_start)
 
     def set_cam_config(self, **kwargs) -> None:
         self.handler.send_cam_config(**kwargs)
@@ -367,12 +368,15 @@ class DonkeyUnitySimHandler(IMesgHandler):
             )
 
     def set_car_config(self, conf: Dict[str, Any]) -> None:
+        if "random_start" not in conf:
+            conf['random_start'] = False
         if "body_style" in conf:
             self.send_car_config(
                 conf["body_style"],
                 conf["body_rgb"],
                 conf["car_name"],
                 conf["font_size"],
+                conf["random_start"],
             )
 
     def set_racer_bio(self, conf: Dict[str, Any]) -> None:
@@ -698,6 +702,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         body_rgb: Tuple[int, int, int] = (255, 255, 255),
         car_name: str = "car",
         font_size: int = 100,
+        random_start: bool = False
     ):
         """
         # body_style = "donkey" | "bare" | "car01" | "f1" | "cybertruck"
@@ -709,6 +714,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         assert len(body_rgb) == 3
         assert isinstance(car_name, str)
         assert isinstance(font_size, int) or isinstance(font_size, str)
+        assert isinstance(random_start, bool)
 
         msg = {
             "msg_type": "car_config",
@@ -718,6 +724,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "body_b": str(body_rgb[2]),
             "car_name": car_name,
             "font_size": str(font_size),
+            "random_start": random_start,
         }
         self.blocking_send(msg)
         time.sleep(0.1)
