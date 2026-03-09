@@ -95,6 +95,7 @@ namespace tk
             client.dispatcher.Register("lidar_config", new tk.Delegates.OnMsgRecv(OnLidarConfig));
             client.dispatcher.Register("set_position", new tk.Delegates.OnMsgRecv(OnSetPosition));
             client.dispatcher.Register("node_position", new tk.Delegates.OnMsgRecv(OnNodePositionRecv));
+            client.dispatcher.Register("physics_config", new tk.Delegates.OnMsgRecv(OnPhysicsConfig));
         }
 
         public void Start()
@@ -517,6 +518,40 @@ namespace tk
                 lidar.SetConfig(offset_x, offset_y, offset_z, rot_x, degPerSweepInc, degAngDown, degAngDelta, maxRange, noise, numSweepsLevels);
             }
 
+            yield return null;
+        }
+
+        void OnPhysicsConfig(JSONObject json)
+        {
+            try
+            {
+                float massScale = 1.0f;
+                if (json.HasField("mass_scale"))
+                {
+                    massScale = float.Parse(json.GetField("mass_scale").str, CultureInfo.InvariantCulture.NumberFormat);
+                }
+
+                if (carObj != null)
+                {
+                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale));
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }
+            
+        }
+
+        IEnumerator SetPhysicsConfig(float massScale)
+        {
+            Car carScript = carObj.GetComponent<Car>();
+            if (carScript != null)
+            {
+                carScript.SetMassScale(massScale);
+            }
             yield return null;
         }
 
