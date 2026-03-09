@@ -20,7 +20,7 @@ public static class GlobalState
     public static string log_path = "default";
     public static bool extendedTelemetry = true;
     public static bool generateTrees = true;
-    public static bool generateRandomCones = true;
+    public static bool generateRandomCones = false;
     public static bool randomLight = true;
     public static bool overheadCamera = false;
     public static bool raceCameras = false;

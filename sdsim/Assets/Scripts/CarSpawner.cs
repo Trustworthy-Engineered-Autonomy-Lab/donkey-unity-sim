@@ -379,6 +379,8 @@ public class CarSpawner : MonoBehaviour
         }
 
         int total = pathManager.carPath.centerNodes.Count;
+        // Test setting a seed 
+        UnityEngine.Random.InitState(specificSeed);
         int randIdx = UnityEngine.Random.Range(0,total - 1);
         Vector3 randStartPos = pathManager.carPath.centerNodes[randIdx].pos;
         randStartPos.y += 0.1f;

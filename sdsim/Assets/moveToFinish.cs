@@ -10,16 +10,21 @@ public class moveToFinish : MonoBehaviour
     {
         if (isColliding == 1)
         {
-            // Set the car at a random start position if the flag is set to true.
+            // End the car's run if the randomStart flag is set to true
             if (GlobalState.randomStart)
             {
+                Car car = GetComponent<Car>();
+                if (car != null){
+                    car.last_collision = "barrier";
+                }
+                /*
                 pathManager = GameObject.FindObjectOfType<PathManager>();
                 int total = pathManager.carPath.centerNodes.Count;
                 int randIdx = UnityEngine.Random.Range(0,total - 1);
                 Vector3 randStartPos = pathManager.carPath.centerNodes[randIdx].pos;
                 randStartPos.y += 0.1f;
                 transform.position = randStartPos;
-                transform.rotation = pathManager.carPath.centerNodes[randIdx].rotation;
+                transform.rotation = pathManager.carPath.centerNodes[randIdx].rotation;*/
 
             }
             else{

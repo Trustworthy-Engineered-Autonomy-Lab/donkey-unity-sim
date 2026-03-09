@@ -38,6 +38,7 @@ public class AutoCol : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        Debug.Log("hi");
         if (other.gameObject.tag.Equals("Finish") == false)
         {
  
