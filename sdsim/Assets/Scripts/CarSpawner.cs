@@ -366,6 +366,7 @@ public class CarSpawner : MonoBehaviour
     // Ethan Krol: random start position function
     public (Vector3, Quaternion) GetRandomCarStartPosRot()
     {
+        int specificSeed = 42; //Added by jay to stop error happening when trying to build
 
         // Debugging all output positions
 

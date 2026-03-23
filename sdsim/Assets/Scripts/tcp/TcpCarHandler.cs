@@ -526,14 +526,20 @@ namespace tk
             try
             {
                 float massScale = 1.0f;
+                float frictionScale = 1.0f; //added for friction loss
                 if (json.HasField("mass_scale"))
                 {
                     massScale = float.Parse(json.GetField("mass_scale").str, CultureInfo.InvariantCulture.NumberFormat);
                 }
 
+                if(json.HasField("friction_scale")) //added for friction loss
+                {
+                    frictionScale = float.Parse(json.GetField("friction_scale").str, CultureInfo.InvariantCulture.NumberFormat);
+                }
+
                 if (carObj != null)
                 {
-                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale));
+                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale, frictionScale));
                 }
 
 
@@ -545,11 +551,12 @@ namespace tk
             
         }
 
-        IEnumerator SetPhysicsConfig(float massScale)
+        IEnumerator SetPhysicsConfig(float massScale, float frictionScale) //friction parameter added for friction loss
         {
             Car carScript = carObj.GetComponent<Car>();
             if (carScript != null)
             {
+                carScript.SetFrictionScale(frictionScale); //added for friction loss
                 carScript.SetMassScale(massScale);
             }
             yield return null;

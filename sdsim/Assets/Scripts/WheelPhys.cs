@@ -7,6 +7,7 @@ public class WheelPhys : MonoBehaviour
     WheelCollider wc;
     float originalForwardStiffness;
     float originalSidewaysStiffness;
+    public float frictionScale = 1.0f; //Addition for friction scale
 
     void Awake()
     {
@@ -21,11 +22,11 @@ public class WheelPhys : MonoBehaviour
         if (wc.GetGroundHit(out hit))
         {
             WheelFrictionCurve fFriction = wc.forwardFriction;
-            fFriction.stiffness = hit.collider.material.staticFriction * originalForwardStiffness;
+            fFriction.stiffness = hit.collider.material.staticFriction * originalForwardStiffness * frictionScale; //Multiply by frictionScale for friction loss
             wc.forwardFriction = fFriction;
 
             WheelFrictionCurve sFriction = wc.sidewaysFriction;
-            sFriction.stiffness = hit.collider.material.staticFriction * originalSidewaysStiffness;
+            sFriction.stiffness = hit.collider.material.staticFriction * originalSidewaysStiffness * frictionScale; //Multiply by frictionScale for friction loss
             wc.sidewaysFriction = sFriction;
         }        
     }

@@ -295,6 +295,19 @@ public class Car : MonoBehaviour, ICar{
 		}
 	}
 
+	public void SetFrictionScale(float scale) //added for friction loss
+	{
+		foreach(WheelCollider wc in wheelColliders)
+		{
+			WheelPhys wp = wc.GetComponent<WheelPhys>();
+			if (wp != null)
+			{
+				wp.frictionScale = scale;
+			}
+		}
+		Debug.Log("Friction scale set to " + scale);
+	}
+
 
 
 	void OnCollisionEnter(Collision col)
