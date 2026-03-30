@@ -45,12 +45,14 @@ public class Car : MonoBehaviour, ICar{
 	public string last_collision = "none";
 
 	public float trackAngle = 0f;
+	private float originalMass = -1f;
 
 	 
 	// Use this for initialization
 	void Awake () 
 	{
 		rb = GetComponent<Rigidbody>();
+		originalMass = rb.mass; 
 		 
 		if(rb && centrOfMass)
 		{
@@ -281,9 +283,32 @@ public class Car : MonoBehaviour, ICar{
 	}
 
 	public void ClearLastCollision()
-	{
+	{		
 		last_collision = "none";
 	}
+	public void SetMassScale (float scale)
+	{
+		if(rb != null && originalMass > 0)
+		{
+			rb.mass = originalMass*scale;
+			Debug.Log("Car mass set to " + rb.mass + " (scale: " + scale + ")");
+		}
+	}
+
+	public void SetFrictionScale(float scale) //added for friction loss
+	{
+		foreach(WheelCollider wc in wheelColliders)
+		{
+			WheelPhys wp = wc.GetComponent<WheelPhys>();
+			if (wp != null)
+			{
+				wp.frictionScale = scale;
+			}
+		}
+		Debug.Log("Friction scale set to " + scale);
+	}
+
+
 
 	void OnCollisionEnter(Collision col)
 	{
