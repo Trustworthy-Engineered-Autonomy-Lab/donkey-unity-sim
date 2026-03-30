@@ -14,13 +14,14 @@ public static class GlobalState
     public static bool bAutoHideSceneMenu = false;
     public static float lightIntensity = 1.5f;
     public static bool randomStart = false;
+    public static int startPos = -1;
 
     // should we create a car even though we don't have a network client?
     public static bool bCreateCarWithoutNetworkClient = false;
     public static string log_path = "default";
     public static bool extendedTelemetry = true;
     public static bool generateTrees = true;
-    public static bool generateRandomCones = true;
+    public static bool generateRandomCones = false;
     public static bool randomLight = true;
     public static bool overheadCamera = false;
     public static bool raceCameras = false;

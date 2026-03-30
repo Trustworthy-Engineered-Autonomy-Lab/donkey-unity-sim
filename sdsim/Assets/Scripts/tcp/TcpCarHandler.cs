@@ -361,6 +361,12 @@ namespace tk
                 GlobalState.randomStart = json.GetField("random_start").b;
                 Debug.Log($"config has random start: {GlobalState.randomStart}");
             }
+            
+            Debug.Log($"RAW CAR_CONFIG JSON RECEIVED: {json.ToString()}");
+            if (json.HasField("start_pos")){
+                GlobalState.startPos = int.Parse(json.GetField("start_pos").str);
+                Debug.Log($"config has start position: {GlobalState.startPos}");
+            }
 
             if (json.GetField("font_size") != null)
                 font_size = int.Parse(json.GetField("font_size").str);
@@ -368,12 +374,16 @@ namespace tk
             if (carObj != null && car_name != "Racer Name")
                 UnityMainThreadDispatcher.Instance().Enqueue(SetCarConfig(body_style, body_r, body_g, body_b, car_name, font_size));
             
-            if (GlobalState.randomStart && carSpawner != null){
+            if (GlobalState.randomStart && (GlobalState.startPos == -1) && carSpawner != null){
                 // This implementation is for having just one car.
                 // TCP client doesn't connect before car is spawned so we must move the car.
                 UnityMainThreadDispatcher.Instance().Enqueue(carSpawner.MoveExistingCarsToRandom());
                 //FindObjectOfType<moveToFinish>().updatePos(1);
 
+            }
+
+            if (GlobalState.startPos != -1 && carSpawner != null){
+                UnityMainThreadDispatcher.Instance().Enqueue(carSpawner.MoveToGivenStartPos());
             }
         }
 

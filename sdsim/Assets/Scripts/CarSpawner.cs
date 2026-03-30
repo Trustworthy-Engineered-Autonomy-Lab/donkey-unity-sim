@@ -364,12 +364,19 @@ public class CarSpawner : MonoBehaviour
     }
 
     // Ethan Krol: random start position function
+
+    public (Vector3, Quaternion) GetGivenCarStartPosRot(){
+        Vector3 startPos = pathManager.carPath.centerNodes[GlobalState.startPos].pos;
+        startPos.y += 0.1f;
+        Quaternion startRot = pathManager.carPath.centerNodes[GlobalState.startPos].rotation;
+
+        return (startPos, startRot);
+    }
     public (Vector3, Quaternion) GetRandomCarStartPosRot()
     {
 
         // Debugging all output positions
 
-        Debug.Log("hi from getstartposrotrandom icar");
         int idx = 0;
 
         foreach (PathNode p in pathManager.carPath.centerNodes)
@@ -437,6 +444,21 @@ public class CarSpawner : MonoBehaviour
             go.transform.SetPositionAndRotation(pos, rot);
             go.GetComponent<Car>().SavePosRot();
         }
+        UpdateSplitScreenCams();
+        yield return null;
+    }
+
+    public IEnumerator MoveToGivenStartPos(){
+        if(!GlobalState.randomStart) yield return null;
+
+        foreach (GameObject go in cars){
+            Vector3 pos;
+            Quaternion rot;
+            (pos, rot) = GetGivenCarStartPosRot();
+            go.transform.SetPositionAndRotation(pos, rot);
+            go.GetComponent<Car>().SavePosRot();
+        }
+
         UpdateSplitScreenCams();
         yield return null;
     }
