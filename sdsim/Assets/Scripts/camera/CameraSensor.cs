@@ -13,6 +13,7 @@ public class CameraSensor : MonoBehaviour {
 	Texture2D tex;
 	RenderTexture ren;
 	Rect ImageRect;
+	private Vector3 originalRotation;
 
 	public void SetConfig(float fov, float offset_x, float offset_y, float offset_z, float rot_x, float rot_y, float rot_z, int img_w, int img_h, int img_d, string _img_enc)
 	{
@@ -44,8 +45,14 @@ public class CameraSensor : MonoBehaviour {
 			sensorCam.fieldOfView = fov;
 	}
 
+	public void SetPitchOffset(float pitchOffset)
+  	{
+      transform.localEulerAngles = originalRotation + new Vector3(pitchOffset, 0, 0);
+  	}
+
 	void Awake()
 	{
+		originalRotation = transform.localEulerAngles;
 		tex = new Texture2D(width, height, TextureFormat.RGB24, false);
 		ren = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
 		sensorCam.targetTexture = ren;

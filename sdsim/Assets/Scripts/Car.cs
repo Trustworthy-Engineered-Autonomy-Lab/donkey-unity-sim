@@ -47,6 +47,10 @@ public class Car : MonoBehaviour, ICar{
 	public float trackAngle = 0f;
 	private float originalMass = -1f;
 
+	// Asymmetric drag: a constant force applied at the front-right wheel each physics tick
+	private float dragForce = 0f;
+	private bool applyAsymmetricDrag = false;
+
 	 
 	// Use this for initialization
 	void Awake () 
@@ -250,6 +254,28 @@ public class Car : MonoBehaviour, ICar{
 			wc.brakeTorque = brake;
 		}
 
+		// Apply asymmetric drag at the front-right wheel position
+		// A backward force at one wheel simulates extra rolling resistance
+		// (flat tire, low pressure). Because it's off-center from the CoM,
+		// it creates a yaw torque that pulls the car toward that wheel.
+		if (applyAsymmetricDrag && rb != null)
+		{
+			float forwardSpeed = Vector3.Dot(rb.velocity, transform.forward);
+			if (Mathf.Abs(forwardSpeed) > 0.1f)
+			{
+				Vector3 wheelWorldPos;
+				Quaternion wheelWorldRot;
+				wheelColliders[2].GetWorldPose(out wheelWorldPos, out wheelWorldRot); // [2] = tireColliderFR
+
+				// Force opposes direction of motion in both forward and reverse
+				float dragDirection = -Mathf.Sign(forwardSpeed);
+				Vector3 localForce = new Vector3(0f, 0f, dragDirection * dragForce);
+				Vector3 worldForce = transform.TransformDirection(localForce);
+
+				rb.AddForceAtPosition(worldForce, wheelWorldPos, ForceMode.Force);
+			}
+		}
+
 	}
 
 	void FlipUpright()
@@ -293,6 +319,13 @@ public class Car : MonoBehaviour, ICar{
 			rb.mass = originalMass*scale;
 			Debug.Log("Car mass set to " + rb.mass + " (scale: " + scale + ")");
 		}
+	}
+
+	public void SetDragForce(float force)
+	{
+		dragForce = force;
+		applyAsymmetricDrag = (force != 0f);
+		Debug.Log("Asymmetric drag force set to " + force);
 	}
 
 	public void SetFrictionScale(float scale) //added for friction loss

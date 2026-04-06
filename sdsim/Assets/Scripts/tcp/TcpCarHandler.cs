@@ -547,9 +547,21 @@ namespace tk
                     frictionScale = float.Parse(json.GetField("friction_scale").str, CultureInfo.InvariantCulture.NumberFormat);
                 }
 
+                float camPitch = 0.0f;
+                if (json.HasField("cam_pitch"))
+                {
+                    camPitch = float.Parse(json.GetField("cam_pitch").str, CultureInfo.InvariantCulture.NumberFormat);
+                }
+
+                float dragForce = 0.0f;
+                if (json.HasField("drag_force"))
+                {
+                    dragForce = float.Parse(json.GetField("drag_force").str, CultureInfo.InvariantCulture.NumberFormat);
+                }
+
                 if (carObj != null)
                 {
-                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale, frictionScale));
+                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale, frictionScale, camPitch, dragForce));
                 }
 
 
@@ -561,13 +573,19 @@ namespace tk
             
         }
 
-        IEnumerator SetPhysicsConfig(float massScale, float frictionScale) //friction parameter added for friction loss
+        IEnumerator SetPhysicsConfig(float massScale, float frictionScale, float camPitch, float dragForce)
         {
             Car carScript = carObj.GetComponent<Car>();
             if (carScript != null)
             {
                 carScript.SetFrictionScale(frictionScale); //added for friction loss
                 carScript.SetMassScale(massScale);
+                carScript.SetDragForce(dragForce);
+            }
+
+            if (camPitch != 0.0f && camSensor != null)
+            {
+                camSensor.SetPitchOffset(camPitch);
             }
             yield return null;
         }
