@@ -53,7 +53,9 @@ public class AutoCol : MonoBehaviour
                 Debug.Log("Reset. Lap Lasted: " + timeThisLap);
                 // Debug.Log("Kshitij Position: " + gameObject.transform.position);
                 
-                FindObjectOfType<moveToFinish>().updatePos(1);
+                // Let the Python-side collision timer decide when a crash ends the run. 
+                // Commented out below to make the python collision timer take priority
+                // FindObjectOfType<moveToFinish>().updatePos(1);
                 // Debug.Log("Kshitij Position: " + gameObject.transform.position);
                 
                 resetTime = 3;
