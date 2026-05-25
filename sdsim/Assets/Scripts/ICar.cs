@@ -58,5 +58,6 @@ public interface ICar
 
 	//get the name of the last object we collided with
 	string GetLastCollision();
+	string GetCurrentCollision();
 	void ClearLastCollision();
 }

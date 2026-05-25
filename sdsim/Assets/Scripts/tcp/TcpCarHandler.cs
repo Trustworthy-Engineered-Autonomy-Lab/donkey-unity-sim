@@ -168,7 +168,10 @@ namespace tk
 
 
             json.AddField("hit", car.GetLastCollision());
+            json.AddField("contact", car.GetCurrentCollision());
             car.ClearLastCollision();
+
+            
             json.AddField("time", Time.timeSinceLevelLoad);
 
             Vector3 velocity = car.GetVelocity() / 8.0f;

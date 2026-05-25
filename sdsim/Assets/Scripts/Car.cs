@@ -43,6 +43,8 @@ public class Car : MonoBehaviour, ICar{
 
 	//name of the last object we hit.
 	public string last_collision = "none";
+	public string curr_collision = "none";
+
 
 	public float trackAngle = 0f;
 	private float originalMass = -1f;
@@ -308,6 +310,11 @@ public class Car : MonoBehaviour, ICar{
 		return last_collision;
 	}
 
+	public string GetCurrentCollision()
+	{
+    	return curr_collision;
+	}
+
 	public void ClearLastCollision()
 	{		
 		last_collision = "none";
@@ -346,5 +353,19 @@ public class Car : MonoBehaviour, ICar{
 	void OnCollisionEnter(Collision col)
 	{
 		last_collision = col.gameObject.name;
+		curr_collision = col.gameObject.name;
+	}
+
+	void OnCollisionStay(Collision col)
+	{
+    	curr_collision = col.gameObject.name;
+	}
+
+	void OnCollisionExit(Collision col)
+	{
+    	if (curr_collision == col.gameObject.name)
+    	{
+        	curr_collision = "none";
+    	}
 	}
 }

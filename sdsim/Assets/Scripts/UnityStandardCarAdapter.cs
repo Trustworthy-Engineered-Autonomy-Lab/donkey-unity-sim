@@ -133,6 +133,11 @@ public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 		return last_collision;
 	}
 
+	public string GetCurrentCollision()
+	{
+    	return curr_collision;
+	}
+
 	public void ClearLastCollision()
 	{
 		last_collision = "none";
@@ -144,4 +149,6 @@ public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 	}
 
 	string last_collision = "none";
+	string curr_collision = "none";
+
 }
