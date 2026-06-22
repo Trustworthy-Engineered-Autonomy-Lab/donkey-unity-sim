@@ -48,6 +48,7 @@ public class Car : MonoBehaviour, ICar{
 
 	public float trackAngle = 0f;
 	private float originalMass = -1f;
+	private float[] wheelFrictionScales;
 
 	// Asymmetric drag: a constant force applied at the front-right wheel each physics tick
 	private float dragForce = 0f;
@@ -75,8 +76,13 @@ public class Car : MonoBehaviour, ICar{
             centerLine_Distance = new centerLine_Distance();
         }
 
-        requestTorque = 0f;
+		requestTorque = 0f;
 		requestSteering = 0f;
+		wheelFrictionScales = new float[wheelColliders.Length];
+		for (int i = 0; i < wheelFrictionScales.Length; i++)
+		{
+			wheelFrictionScales[i] = 1.0f;
+		}
 
 		SavePosRot();
 		
@@ -249,10 +255,15 @@ public class Car : MonoBehaviour, ICar{
 		wheelColliders[2].steerAngle = steerAngle;
 		wheelColliders[3].steerAngle = steerAngle;
 
-		//four wheel drive at the moment
-		foreach(WheelCollider wc in wheelColliders)
+		// Four wheel drive. Low-friction wheels receive modestly reduced usable
+		// drive torque; values above 1 do not boost. Do not add brake here,
+		// since very low single-wheel friction should destabilize, not pin the car.
+		for(int i = 0; i < wheelColliders.Length; i++)
 		{
-			wc.motorTorque = throttle;
+			WheelCollider wc = wheelColliders[i];
+			float frictionScale = Mathf.Clamp01(GetWheelFrictionScale(i));
+			float torqueScale = Mathf.Lerp(0.5f, 1.0f, frictionScale);
+			wc.motorTorque = throttle * torqueScale;
 			wc.brakeTorque = brake;
 		}
 
@@ -337,18 +348,42 @@ public class Car : MonoBehaviour, ICar{
 
 	public void SetFrictionScale(float scale) //added for friction loss
 	{
-		foreach(WheelCollider wc in wheelColliders)
+		for(int i = 0; i < wheelColliders.Length; i++)
 		{
+			WheelCollider wc = wheelColliders[i];
+			wheelFrictionScales[i] = Mathf.Max(0.0f, scale);
 			WheelPhys wp = wc.GetComponent<WheelPhys>();
 			if (wp != null)
 			{
-				wp.frictionScale = scale;
+				wp.SetFrictionScale(scale);
 			}
 		}
 		Debug.Log("Friction scale set to " + scale);
 	}
 
+	public void SetWheelFrictionScale(int wheelIndex, float scale) //Added for single wheel friction loss
+	{
+		if (wheelIndex < 0 || wheelIndex >= wheelColliders.Length)
+			return;
 
+		wheelFrictionScales[wheelIndex] = Mathf.Max(0.0f, scale);
+		WheelPhys wp = wheelColliders[wheelIndex].GetComponent<WheelPhys>();
+		if (wp != null)
+		{
+			wp.SetFrictionScale(scale);
+		}
+
+		Debug.Log("Wheel " + wheelIndex + " friction scale set to " + scale);
+	}
+
+	float GetWheelFrictionScale(int wheelIndex)
+	{
+		if (wheelFrictionScales == null || wheelIndex < 0 || wheelIndex >= wheelFrictionScales.Length)
+		{
+			return 1.0f;
+		}
+		return wheelFrictionScales[wheelIndex];
+	}
 
 	void OnCollisionEnter(Collision col)
 	{
