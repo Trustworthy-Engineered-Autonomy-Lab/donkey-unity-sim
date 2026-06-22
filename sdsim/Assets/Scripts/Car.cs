@@ -256,10 +256,9 @@ public class Car : MonoBehaviour, ICar{
 			wc.brakeTorque = brake;
 		}
 
-		// Apply asymmetric drag at the front-right wheel position
-		// A backward force at one wheel simulates extra rolling resistance
-		// (flat tire, low pressure). Because it's off-center from the CoM,
-		// it creates a yaw torque that pulls the car toward that wheel.
+		// Apply a car-relative rightward force at the front-right wheel position.
+		// Because the force is applied off-center from the CoM, it also creates
+		// a yaw torque.
 		if (applyAsymmetricDrag && rb != null)
 		{
 			float forwardSpeed = Vector3.Dot(rb.velocity, transform.forward);
@@ -269,10 +268,8 @@ public class Car : MonoBehaviour, ICar{
 				Quaternion wheelWorldRot;
 				wheelColliders[2].GetWorldPose(out wheelWorldPos, out wheelWorldRot); // [2] = tireColliderFR
 
-				// Force opposes direction of motion in both forward and reverse
-				float dragDirection = -Mathf.Sign(forwardSpeed);
-				Vector3 localForce = new Vector3(0f, 0f, dragDirection * dragForce);
-				Vector3 worldForce = transform.TransformDirection(localForce);
+				// Apply force toward the car's local right side.
+				Vector3 worldForce = transform.right * dragForce;
 
 				rb.AddForceAtPosition(worldForce, wheelWorldPos, ForceMode.Force);
 			}
