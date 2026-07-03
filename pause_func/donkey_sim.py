@@ -144,6 +144,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_obs = self.image_array
         self.time_received = time.time()
         self.last_received = self.time_received
+        self.sim_time = 0.0
         self.hit = "none"
         self.cte = 0.0
         self.x = 0.0
@@ -412,6 +413,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_obs = self.image_array
         self.time_received = time.time()
         self.last_received = self.time_received
+        self.sim_time = 0.0
         self.hit = "none"
         self.cte = 0.0
         self.x = 0.0
@@ -460,6 +462,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "pos": (self.x, self.y, self.z),
             "cte": self.cte,
             "speed": self.speed,
+            "sim_time": self.sim_time,
             "forward_vel": self.forward_vel,
             "hit": self.hit,
             "gyro": (self.gyro_x, self.gyro_y, self.gyro_z),
@@ -523,6 +526,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.image_array = np.asarray(image)
         self.time_received = time.time()
 
+        if "time" in message:
+            self.sim_time = message["time"]
+
         if "image_b" in message:
             img_string_b = message["image_b"]
             image_b = Image.open(BytesIO(base64.b64decode(img_string_b)))
@@ -577,6 +583,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
         if "hit" in message:
             self.hit = message["hit"]
+
+        
 
         self.determine_episode_over()
 
