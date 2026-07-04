@@ -538,6 +538,18 @@ namespace tk
         {
             try
             {
+                float oneWheelFrictionScale = 1.0f; //Added for singular wheel friction loss
+                int oneWheelFrictionIndex = -1; //Which wheel loses friction
+
+                if (json.HasField("one_wheel_friction_scale"))
+                {
+                    oneWheelFrictionScale = float.Parse(json.GetField("one_wheel_friction_scale").str, CultureInfo.InvariantCulture.NumberFormat);
+                }
+
+                if (json.HasField("one_wheel_friction_index"))
+                {
+                    oneWheelFrictionIndex = int.Parse(json.GetField("one_wheel_friction_index").str);
+                }   
                 float massScale = 1.0f;
                 float frictionScale = 1.0f; //added for friction loss
                 if (json.HasField("mass_scale"))
@@ -564,10 +576,8 @@ namespace tk
 
                 if (carObj != null)
                 {
-                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale, frictionScale, camPitch, dragForce));
-                }
-
-
+                    UnityMainThreadDispatcher.Instance().Enqueue(SetPhysicsConfig(massScale, frictionScale, camPitch, dragForce, oneWheelFrictionScale, oneWheelFrictionIndex));
+                }                 
             }
             catch (Exception e)
             {
@@ -576,14 +586,21 @@ namespace tk
             
         }
 
-        IEnumerator SetPhysicsConfig(float massScale, float frictionScale, float camPitch, float dragForce)
+        
+        IEnumerator SetPhysicsConfig(float massScale, float frictionScale, float camPitch, float dragForce, float oneWheelFrictionScale, int oneWheelFrictionIndex)
         {
             Car carScript = carObj.GetComponent<Car>();
             if (carScript != null)
             {
                 carScript.SetFrictionScale(frictionScale); //added for friction loss
+
                 carScript.SetMassScale(massScale);
                 carScript.SetDragForce(dragForce);
+
+                if (oneWheelFrictionIndex >= 0)
+                {
+                    carScript.SetWheelFrictionScale(oneWheelFrictionIndex, oneWheelFrictionScale);
+                }
             }
 
             if (camPitch != 0.0f && camSensor != null)
