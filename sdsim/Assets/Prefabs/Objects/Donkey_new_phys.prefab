@@ -1462,12 +1462,15 @@ MonoBehaviour:
   prevVel: {x: 0, y: 0, z: 0}
   startPos: {x: 0, y: 0, z: 0}
   startRot: {x: 0, y: 0, z: 0, w: 0}
+  centerLine_Distance: {fileID: 0}
   rb: {fileID: 0}
   lastSteer: 0
   lastAccel: 0
   activity: keep_lane
   maxSteer: 25
   last_collision: none
+  curr_collision: none
+  trackAngle: 0
 --- !u!114 &114314152752413966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1509,6 +1512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b72c8963155c65242ac2a57bb9206c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathManager: {fileID: 0}
 --- !u!114 &5253794900234009585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1521,8 +1525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b81f2b2ec3aa0e4b84dd81fc22f1e08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathCreator: {fileID: 0}
   dist: 0
-  obj: {fileID: -927199367670048503, guid: c7c9cadc84d0f16428e3c9d28b5b2274, type: 3}
+  cAngle: 0
 --- !u!1 &1400266298984620
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,6 +2207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0620291b95526354dbb90fd1081e2937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frictionScale: 1
 --- !u!1 &1477061125221046
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,6 +2363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0620291b95526354dbb90fd1081e2937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frictionScale: 1
 --- !u!1 &1492330652998922
 GameObject:
   m_ObjectHideFlags: 0
@@ -3894,6 +3901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0620291b95526354dbb90fd1081e2937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frictionScale: 1
 --- !u!1 &1869755540700278
 GameObject:
   m_ObjectHideFlags: 0
@@ -4389,6 +4397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0620291b95526354dbb90fd1081e2937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frictionScale: 1
 --- !u!1 &1994745762937128
 GameObject:
   m_ObjectHideFlags: 0
@@ -6125,7 +6134,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8281473344312031964
 Transform:
   m_ObjectHideFlags: 0
@@ -6134,7 +6143,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2352364561838823159}
   m_LocalRotation: {x: 0.13052624, y: -0, z: 0.00000007332449, w: 0.9914449}
-  m_LocalPosition: {x: 0.452, y: 1.1203952, z: 0.5528488}
+  m_LocalPosition: {x: 0, y: 1.1203952, z: 0.5528488}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 140302486272146953}
